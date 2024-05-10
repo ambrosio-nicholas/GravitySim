@@ -79,8 +79,6 @@ public class Attraction_Force : MonoBehaviour
             //Find Orbital Velocity
             initialVelocity = new Vector2(Mathf.Sqrt(G * starMass / distance), 0);
             planetRB.velocity += initialVelocity;
-
-            print("Initial Velocity for " + gameObject + " is: " + initialVelocity);
         }
         else
         {
