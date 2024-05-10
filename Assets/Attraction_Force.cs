@@ -4,44 +4,51 @@ using UnityEngine;
 
 public class Attraction_Force : MonoBehaviour
 {
-    public GameObject planet;
-    public GameObject star;
-    private Vector2 starPos;
-    private Vector2 planetPos;
+    public GameObject[] planets;
     public Rigidbody2D planetRB;
+    private float m1;
 
-    [SerializeField] private float planetMass = 10.0f;
-    [SerializeField] private float starMass = 30.0f;
     [SerializeField] private Vector2 initalVelocity = new Vector2(5.0f, 0.0f);
-    [SerializeField] private float G = 0.0000667f;
+    [SerializeField] private float G = 0.00667f;
 
-    void Start()
+    private void Start()
     {
-        planet = GameObject.FindGameObjectWithTag("planet");
-        star = GameObject.FindGameObjectWithTag("star");
-        planetRB = planet.GetComponent<Rigidbody2D>();
+        //Find all of the planets and their rigidbodies
+        planets = GameObject.FindGameObjectsWithTag("planet");
+        planetRB = gameObject.GetComponent<Rigidbody2D>();
+        m1 = planetRB.mass;
 
-        planetRB.velocity = planetRB.velocity + initalVelocity;
+        //Give any initial velocities to a planet
+        gameObject.GetComponent<Rigidbody2D>().velocity += initalVelocity;
+        print("Applied initial velocity");
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        planetRB.velocity = planetRB.velocity + CalculateForce();
+        ApplyForce();
     }
 
-    public Vector2 CalculateForce()
+    public void ApplyForce()
     {
-        starPos = star.transform.position;
-        planetPos = planet.transform.position;
+        //for each planet that's affecting it
+        for (int i = 0; i < planets.Length; i++)
+        {
+            print(planets[i]);
+            //If it's not itself
+            if(planets[i] != gameObject)
+            {
+                Rigidbody2D otherPlanet = planets[i].GetComponent<Rigidbody2D>();
+                float m2 = otherPlanet.mass;
+                float distance = Vector2.Distance(planetRB.transform.position, otherPlanet.transform.position);
 
-        float distance = Vector2.Distance(starPos, planetPos);
+                //calculate force
+                float force = (G * (m1 * m2)) / (distance * distance);
+                Vector2 forceWithDirection = (-1 * force * (planetRB.transform.position - otherPlanet.transform.position)); // multiplied by -1 cause it was repelling instead of attracting
 
-        float force = (G * (starMass*planetMass)) / (distance * distance);
+                //apply force
+                planetRB.velocity += forceWithDirection;
+            }
 
-        Vector2 forceWithDirection = (force * (starPos - planetPos));
-
-        return (forceWithDirection);
+        }
     }
-
-    // F = G * (M1*M2)/R^2
 }
