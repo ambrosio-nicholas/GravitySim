@@ -281,7 +281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planets: []
   planetRB: {fileID: 0}
-  initalVelocity: {x: -15, y: 0}
+  star: {fileID: 0}
   G: 0.00667
 --- !u!50 &118805624
 Rigidbody2D:
@@ -363,11 +363,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 118805620}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: -24, z: 0}
+  m_LocalPosition: {x: 0, y: 24, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
@@ -422,7 +422,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 53.02
+  orthographic size: 56.54
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -557,7 +557,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &669435680
 MonoBehaviour:
@@ -573,7 +573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planets: []
   planetRB: {fileID: 0}
-  initalVelocity: {x: 10, y: 0}
+  star: {fileID: 0}
   G: 0.00667
 --- !u!58 &669435681
 CircleCollider2D:
@@ -856,7 +856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planets: []
   planetRB: {fileID: 0}
-  initalVelocity: {x: 0, y: -14}
+  star: {fileID: 0}
   G: 0.00667
 --- !u!50 &725982261
 Rigidbody2D:
@@ -938,11 +938,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725982257}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 53.6, y: 1.93, z: 0}
+  m_LocalPosition: {x: 0, y: 53.6, z: 0}
   m_LocalScale: {x: 2.2, y: 2.2, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1946890734
 GameObject:
@@ -958,7 +958,7 @@ GameObject:
   - component: {fileID: 1946890735}
   m_Layer: 0
   m_Name: Star
-  m_TagString: planet
+  m_TagString: star
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1063,5 +1063,5 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

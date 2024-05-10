@@ -6,9 +6,9 @@ public class Attraction_Force : MonoBehaviour
 {
     public GameObject[] planets;
     public Rigidbody2D planetRB;
+    public Rigidbody2D star; 
     private float m1;
 
-    [SerializeField] private Vector2 initalVelocity = new Vector2(5.0f, 0.0f);
     [SerializeField] private float G = 0.00667f;
 
     private void Start()
@@ -16,11 +16,11 @@ public class Attraction_Force : MonoBehaviour
         //Find all of the planets and their rigidbodies
         planets = GameObject.FindGameObjectsWithTag("planet");
         planetRB = gameObject.GetComponent<Rigidbody2D>();
+        star = GameObject.FindGameObjectWithTag("star").GetComponent<Rigidbody2D>();
         m1 = planetRB.mass;
 
         //Give any initial velocities to a planet
-        gameObject.GetComponent<Rigidbody2D>().velocity += initalVelocity;
-        print("Applied initial velocity");
+        InitialVelocity();
     }
 
     private void FixedUpdate()
@@ -28,12 +28,22 @@ public class Attraction_Force : MonoBehaviour
         ApplyForce();
     }
 
-    public void ApplyForce()
+    private void ApplyForce()
     {
+        //apply force from the star
+        float starMass = star.mass;
+        float starDistance = Vector2.Distance(planetRB.transform.position, star.transform.position);
+
+        //calculate force
+        float starForce = (G * (m1 * starMass)) / (starDistance * starDistance);
+        Vector2 starForceWithDirection = (-1 * starForce * (planetRB.transform.position - star.transform.position)); // multiplied by -1 cause it was repelling instead of attracting
+
+        //apply force
+        planetRB.velocity += starForceWithDirection;
+
         //for each planet that's affecting it
         for (int i = 0; i < planets.Length; i++)
         {
-            print(planets[i]);
             //If it's not itself
             if(planets[i] != gameObject)
             {
@@ -50,5 +60,15 @@ public class Attraction_Force : MonoBehaviour
             }
 
         }
+    }
+
+    private void InitialVelocity() // !!!!!!!!!!!!!!!!!!!!!! Make the initial velocity based off of all surrounding objects and it will help with moons and stuff. Might fix the problem I'm having.....
+    {
+        float distance = Vector2.Distance(planetRB.transform.position, star.transform.position);
+
+        //Find Orbital Velocity
+        Vector2 initialVelocity = new Vector2(Mathf.Sqrt(G * star.mass * distance), 0); //If you multiply by the radius(distance), instead of dividing like you're supposed to, it makes a really cool three-leaf orbit
+        gameObject.GetComponent<Rigidbody2D>().velocity += initialVelocity;
+        print("Initial Velocity for " + gameObject + " is: " + initialVelocity);
     }
 }
