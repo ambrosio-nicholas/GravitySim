@@ -5,22 +5,25 @@ using UnityEngine;
 public class Attraction_Force : MonoBehaviour
 {
     public GameObject[] planets;
+    public GameObject star;
     public Rigidbody2D planetRB;
-    public Rigidbody2D star; 
     private float m1;
+    const float G = 0.0667f;
 
-    [SerializeField] private float G = 0.00667f;
+    private TrailRenderer trail;
+    [SerializeField] Vector2 initialVelocity = new Vector2(0.0f,0.0f);
 
     private void Start()
     {
         //Find all of the planets and their rigidbodies
         planets = GameObject.FindGameObjectsWithTag("planet");
+        trail = gameObject.GetComponent<TrailRenderer>();
+        star = GameObject.FindGameObjectWithTag("star");
         planetRB = gameObject.GetComponent<Rigidbody2D>();
-        star = GameObject.FindGameObjectWithTag("star").GetComponent<Rigidbody2D>();
         m1 = planetRB.mass;
 
-        //Give any initial velocities to a planet
         InitialVelocity();
+        SetTrail();
     }
 
     private void FixedUpdate()
@@ -30,16 +33,18 @@ public class Attraction_Force : MonoBehaviour
 
     private void ApplyForce()
     {
-        //apply force from the star
-        float starMass = star.mass;
-        float starDistance = Vector2.Distance(planetRB.transform.position, star.transform.position);
+        //for the star (if there is one)
+        if (star)
+        {
+            float starMass = star.GetComponent<Rigidbody2D>().mass;
+            float starDistance = Vector2.Distance(planetRB.transform.position, star.GetComponent<Rigidbody2D>().transform.position);
 
-        //calculate force
-        float starForce = (G * (m1 * starMass)) / (starDistance * starDistance);
-        Vector2 starForceWithDirection = (-1 * starForce * (planetRB.transform.position - star.transform.position)); // multiplied by -1 cause it was repelling instead of attracting
+            float starForce = (G * (m1 * starMass) / (starDistance * starDistance));
+            Vector2 starDirection = star.GetComponent<Rigidbody2D>().transform.position - planetRB.transform.position;
+            Vector2 starForceWithDirection = (starForce * (starDirection / starDirection.magnitude)) / planetRB.mass;
 
-        //apply force
-        planetRB.velocity += starForceWithDirection;
+            planetRB.velocity += starForceWithDirection * Time.deltaTime;
+        }
 
         //for each planet that's affecting it
         for (int i = 0; i < planets.Length; i++)
@@ -53,22 +58,52 @@ public class Attraction_Force : MonoBehaviour
 
                 //calculate force
                 float force = (G * (m1 * m2)) / (distance * distance);
-                Vector2 forceWithDirection = (-1 * force * (planetRB.transform.position - otherPlanet.transform.position)); // multiplied by -1 cause it was repelling instead of attracting
+                Vector2 direction = otherPlanet.transform.position - planetRB.transform.position;
+                Vector2 forceWithDirection = (force * (direction/direction.magnitude)) / planetRB.mass;
 
                 //apply force
-                planetRB.velocity += forceWithDirection;
+                planetRB.velocity += forceWithDirection * Time.deltaTime;
             }
 
         }
     }
 
-    private void InitialVelocity() // !!!!!!!!!!!!!!!!!!!!!! Make the initial velocity based off of all surrounding objects and it will help with moons and stuff. Might fix the problem I'm having.....
+    
+    private void InitialVelocity()
     {
-        float distance = Vector2.Distance(planetRB.transform.position, star.transform.position);
+        if (star)
+        {
+            float distance = Vector2.Distance(planetRB.transform.position, star.GetComponent<Rigidbody2D>().transform.position);
+            float starMass = star.GetComponent<Rigidbody2D>().mass;
 
-        //Find Orbital Velocity
-        Vector2 initialVelocity = new Vector2(Mathf.Sqrt(G * star.mass * distance), 0); //If you multiply by the radius(distance), instead of dividing like you're supposed to, it makes a really cool three-leaf orbit
-        gameObject.GetComponent<Rigidbody2D>().velocity += initialVelocity;
-        print("Initial Velocity for " + gameObject + " is: " + initialVelocity);
+            //Find Orbital Velocity
+            initialVelocity = new Vector2(Mathf.Sqrt(G * starMass / distance), 0);
+            planetRB.velocity += initialVelocity;
+
+            print("Initial Velocity for " + gameObject + " is: " + initialVelocity);
+        }
+        else
+        {
+            planetRB.velocity += initialVelocity;
+        }
+    }
+
+    private void SetTrail()
+    {
+        if (star)
+        {
+            float r = Vector2.Distance(planetRB.transform.position, star.GetComponent<Rigidbody2D>().transform.position);
+            float orbitalPeriod = (Mathf.Sqrt((4 * Mathf.PI * (r * r * r)) / (G * star.GetComponent<Rigidbody2D>().mass)) * 2) - 0.6f;
+            trail.time = orbitalPeriod;
+        }
+        else
+        {
+            trail.time = 20;
+        }
+        Color trailColor = gameObject.GetComponent<SpriteRenderer>().color * 0.9f;
+        trail.startColor = trailColor;
+        trail.endColor = trailColor * 0.05f;
+
+        trail.startWidth = gameObject.GetComponent<SpriteRenderer>().bounds.size.x * 0.6f;
     }
 }
