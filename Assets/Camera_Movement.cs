@@ -6,12 +6,11 @@ public class Camera_Movement : MonoBehaviour
 {
     private float moveSpeed = 25.0f;
     private float zoomSpeed;
-    private float currentScrollDelta = 55f;
+    private float currentScrollDelta = 60f;
     private float quick = 1f;
 
     private Vector3 origin;
     private Vector3 difference;
-    private Vector3 resetCam;
 
     private bool drag = false;
 

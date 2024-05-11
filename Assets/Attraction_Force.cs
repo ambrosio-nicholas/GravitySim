@@ -12,6 +12,7 @@ public class Attraction_Force : MonoBehaviour
 
     private TrailRenderer trail;
     [SerializeField] Vector2 initialVelocity = new Vector2(0.0f,0.0f);
+    [SerializeField] bool specifyInitialVelocity = false;
 
     private void Start()
     {
@@ -71,14 +72,14 @@ public class Attraction_Force : MonoBehaviour
     
     private void InitialVelocity()
     {
-        if (star)
+        if (star && !specifyInitialVelocity)
         {
             float distance = Vector2.Distance(planetRB.transform.position, star.GetComponent<Rigidbody2D>().transform.position);
             float starMass = star.GetComponent<Rigidbody2D>().mass;
 
             //Find Orbital Velocity
             initialVelocity = new Vector2(Mathf.Sqrt(G * starMass / distance), 0);
-            planetRB.velocity += initialVelocity;
+            planetRB.velocity += initialVelocity * planetRB.transform.right;
         }
         else
         {
