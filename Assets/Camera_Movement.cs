@@ -9,6 +9,12 @@ public class Camera_Movement : MonoBehaviour
     private float currentScrollDelta = 55f;
     private float quick = 1f;
 
+    private Vector3 origin;
+    private Vector3 difference;
+    private Vector3 resetCam;
+
+    private bool drag = false;
+
     private Camera cam;
 
     private void Start()
@@ -23,7 +29,33 @@ public class Camera_Movement : MonoBehaviour
         ChangeCamSpeed();
     }
 
+    private void LateUpdate()
+    {
+        DragCamera();
+    }
 
+
+    private void DragCamera()
+    {
+        if (Input.GetMouseButton(2))
+        {
+            difference = (cam.ScreenToWorldPoint(Input.mousePosition)) - cam.transform.position;
+            if (drag == false)
+            {
+                drag = true;
+                origin = cam.ScreenToWorldPoint(Input.mousePosition);
+            }
+        }
+        else
+        {
+            drag = false;
+        }
+
+        if (drag)
+        {
+            cam.transform.position = origin - difference;
+        }
+    }
 
     private void PanCamera()
     {

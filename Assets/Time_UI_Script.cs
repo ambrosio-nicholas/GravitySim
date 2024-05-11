@@ -10,11 +10,7 @@ public class Time_UI_Script : MonoBehaviour
     [SerializeField] private Sprite playButton;
     [SerializeField] private Sprite pauseButton;
     [SerializeField] private Button pausePlayButton;
-
-    void Start()
-    {
-        
-    }
+    [SerializeField] private Text speedText;
 
     void Update()
     {
@@ -29,11 +25,13 @@ public class Time_UI_Script : MonoBehaviour
             Time.timeScale = 0f;
             isPaused = true;
             pausePlayButton.image.sprite = playButton;
+            speedText.text = "0x speed";
         }
         else if (Input.GetKeyDown(KeyCode.Space) && isPaused == true)
         {
             Time.timeScale = timeSpeed;
             isPaused = false;
+            speedText.text = timeSpeed + "x speed";
             pausePlayButton.image.sprite = pauseButton;
         }
         if (Input.GetKeyDown(KeyCode.Period) && timeSpeed < 33)
@@ -42,13 +40,14 @@ public class Time_UI_Script : MonoBehaviour
             {
                 Time.timeScale = timeSpeed;
                 isPaused = false;
+                speedText.text = timeSpeed + "x speed";
                 pausePlayButton.image.sprite = pauseButton;
             }
             else
             {
                 timeSpeed *= 2;
                 Time.timeScale = timeSpeed;
-                print(timeSpeed + "x speed");
+                speedText.text = timeSpeed + "x speed";
             }
         } else if (Input.GetKeyDown(KeyCode.Comma) && timeSpeed > 0.5f)
         {
@@ -56,19 +55,20 @@ public class Time_UI_Script : MonoBehaviour
             {
                 Time.timeScale = timeSpeed;
                 isPaused = false;
+                speedText.text = timeSpeed + "x speed";
                 pausePlayButton.image.sprite = pauseButton;
             }
             else
             {
                 timeSpeed /= 2;
                 Time.timeScale = timeSpeed;
-                print(timeSpeed + "x speed");
+                speedText.text = timeSpeed + "x speed";
             }
         } else if (Input.GetKeyDown(KeyCode.Slash))
         {
             timeSpeed = 1f;
             Time.timeScale = timeSpeed;
-            print(timeSpeed + "x speed");
+            speedText.text = timeSpeed + "x speed";
         }
     }
 
@@ -78,12 +78,14 @@ public class Time_UI_Script : MonoBehaviour
         {
             Time.timeScale = 0f;
             isPaused = true;
+            speedText.text = "0x speed";
             pausePlayButton.image.sprite = playButton;
         }
         else if (isPaused == true)
         {
             Time.timeScale = timeSpeed;
             isPaused = false;
+            speedText.text = timeSpeed + "x speed";
             pausePlayButton.image.sprite = pauseButton;
         }
     }
@@ -94,12 +96,13 @@ public class Time_UI_Script : MonoBehaviour
         {
             Time.timeScale = timeSpeed;
             isPaused = false;
+            speedText.text = timeSpeed + "x speed";
             pausePlayButton.image.sprite = pauseButton;
         } else if (timeSpeed < 33)
         {
             timeSpeed *= 2;
             Time.timeScale = timeSpeed;
-            print(timeSpeed + "x speed");
+            speedText.text = timeSpeed + "x speed";
         }
     }
 
@@ -109,13 +112,14 @@ public class Time_UI_Script : MonoBehaviour
         {
             Time.timeScale = timeSpeed;
             isPaused = false;
+            speedText.text = timeSpeed + "x speed";
             pausePlayButton.image.sprite = pauseButton;
         }
         else if (timeSpeed > 0.5f)
         {
             timeSpeed /= 2;
             Time.timeScale = timeSpeed;
-            print(timeSpeed + "x speed");
+            speedText.text = timeSpeed + "x speed";
         }
     }
 }
