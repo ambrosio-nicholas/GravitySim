@@ -12,11 +12,10 @@ public class Time_UI_Script : MonoBehaviour
     [SerializeField] private Button pausePlayButton;
     [SerializeField] private Text speedText;
 
-    void Update()
+    private void Update()
     {
         ChangeTime();
     }
-
 
     private void ChangeTime()
     {

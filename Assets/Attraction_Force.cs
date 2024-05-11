@@ -23,7 +23,7 @@ public class Attraction_Force : MonoBehaviour
         planetRB = gameObject.GetComponent<Rigidbody2D>();
         m1 = planetRB.mass;
 
-        InitialVelocity();
+        PlanetInitialVelocity();
         SetTrail();
     }
 
@@ -70,16 +70,28 @@ public class Attraction_Force : MonoBehaviour
     }
 
     
-    private void InitialVelocity()
+    private void PlanetInitialVelocity()
     {
         if (star && !specifyInitialVelocity)
         {
             float distance = Vector2.Distance(planetRB.transform.position, star.GetComponent<Rigidbody2D>().transform.position);
             float starMass = star.GetComponent<Rigidbody2D>().mass;
 
+            //Find tangent to star
+            Vector2 direction = (planetRB.transform.position - star.GetComponent<Rigidbody2D>().transform.position) / distance;
+            float temp = direction.x;
+            direction.x = direction.y;
+            direction.y = -1 * temp;
+
             //Find Orbital Velocity
             initialVelocity = new Vector2(Mathf.Sqrt(G * starMass / distance), 0);
-            planetRB.velocity += initialVelocity * planetRB.transform.right;
+
+            //Make it tangential to star
+            initialVelocity.y = initialVelocity.x * direction.y;
+            initialVelocity.x *= direction.x;
+
+            //Apply Orbital Velocity
+            planetRB.velocity += initialVelocity;
         }
         else
         {
