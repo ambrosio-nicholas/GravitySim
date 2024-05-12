@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planets: []
+  moons: []
   star: {fileID: 0}
   planetRB: {fileID: 0}
   initialVelocity: {x: 0, y: 0}
@@ -482,7 +483,7 @@ GameObject:
   - component: {fileID: 524507272}
   m_Layer: 0
   m_Name: Moon
-  m_TagString: planet
+  m_TagString: moon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -623,10 +624,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planets: []
+  moons: []
   star: {fileID: 0}
   planetRB: {fileID: 0}
   initialVelocity: {x: 4.5, y: 0}
-  specifyInitialVelocity: 1
+  specifyInitialVelocity: 0
 --- !u!50 &524507275
 Rigidbody2D:
   serializedVersion: 4
@@ -870,6 +872,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planets: []
+  moons: []
   star: {fileID: 0}
   planetRB: {fileID: 0}
   initialVelocity: {x: 0, y: 0}
@@ -1117,6 +1120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planets: []
+  moons: []
   star: {fileID: 0}
   planetRB: {fileID: 0}
   initialVelocity: {x: 0, y: 0}
